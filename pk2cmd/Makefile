@@ -25,6 +25,7 @@ OBJS=cmd_app.o DeviceData.o DeviceFile.o ImportExportHex.o PICkitFunctions.o PIC
 # Grab the version of libusb in /usr/local if possible:
 LIBUSB=/usr/local
 LDFLAGS=-L$(LIBUSB)/lib -lusb
+LIBUSB_DEV=libusb-dev
 
 # CHOOSE A TARGET BEFORE COMPILING
 #
@@ -68,7 +69,7 @@ endif
 all: target $(APP)
 #	@echo $(HOME)
 
-$(APP): target $(OBJS)
+$(APP): target libusb_dev $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) 
 
 cmd_app.o: cmd_app.cpp cmd_app.h stdafx.h
@@ -121,6 +122,9 @@ install:
 	cp $(APP) /usr/local/bin
 	chmod u+s /usr/local/bin/$(APP)
 	cp PK2DeviceFile.dat /usr/share/pk2/PK2DeviceFile.dat
+
+libusb_dev:
+	sudo apt install $(LIBUSB_DEV)
 
 clean:
 	rm -f *.o
